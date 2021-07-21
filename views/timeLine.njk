@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Mini Projeto - MongoDB</title>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+            </div>
+            <div class="header-links">
+                <a href="/"> <button type="submit" class="btn">home</button> </a>
+                <a href="#"><button type="submit" class="btn">olá {{test.nome}}</button></a>
+            </div>
+        </div>
+    </header>
+    <main class="main-container">
+        <h1>Lista de postagens</h1>
+        <hr>
+
+        {% for x in itens %}     
+            <div class="msg">
+                <h3>{{x.titulo}}</h3>
+                <p>Autor: {{x.autor}}</p>
+                <p>{{x.conteudo}}</p>
+                <button type="submit" class="bnt">apagar</button>
+            </div>
+        {% endfor %}
+ 
+    </main>
+</body>
+</html>

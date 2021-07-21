@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Mini Projeto - MongoDB</title>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+            </div>
+            <div class="header-links">
+                <a href="/"> <button type="submit" class="btn">home</button> </a>
+                <a href="/timeLine"><button type="submit" class="btn">Ver Posts</button></a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <h1>Faça agora sua postagem</h1>
+        <hr>
+        <form action="/postar" method="post">
+            <input class="inp" type="email" name="email" id="email" placeholder="Insira seu email">
+            <input class="inp" type="text" name="titulo" id="titulo" placeholder="Insira o titulo da postagem">
+            <textarea name="conteudo" id="conteudo" placeholder="Digite aqui sua mensagem"></textarea>
+            <button type="submit" class="btn">Postar mensagem</button>
+        </form>
+        
+    </main>
+
+</body>
+</html>
