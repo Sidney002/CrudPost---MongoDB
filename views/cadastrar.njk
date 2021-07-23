@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Mini Projeto - MongoDB</title>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+            </div>
+            <div class="header-links">
+                <a href="/"> <button type="submit" class="btn">home</button> </a>
+                <a href="/timeLine"><button type="submit" class="btn">Ver Posts</button></a>
+            </div>
+        </div>
+
+        <main class="main-container cadastrar">
+
+            <form action="/cadastrar" method="POST">
+
+                <h3> Cadastrar Usuario</h3>
+                <label for="nome"><input class="inp" type="text" name="nome" id="nome" placeholder="Nome"></input></label>
+                <label for="email"><input class="inp" type="text" name="email" id="email" placeholder="email"></input></label>
+                <label for="senha"><input class="inp" type="password" name="senha" id="senha" placeholder="senha"></input></label>
+                
+                <div>
+                    <p>Nascimento:</p>
+                    <label for="nascimento"><input class="inp data" type="date" id="nascimento" name="nascimento"></label>
+                </div>
+                <br>
+                <a href=""><input class="bnt" type="submit" value="Cadastrar"></input></a>
+                
+
+            </form>
+
+        </main>
+
+    </header>

@@ -1,53 +1,34 @@
 require('dotenv').config();
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 //sintax = mongodb://bancourl/porta
 const Client = new MongoClient('mongodb://localhost/27017}',
     {useUnifiedTopology: true});
 
-//Funções do usuario
-    //resgatar dados do usuario
-    async function getUser(){
+//Funções de postagens    
+    async function getPost(){
         try{
-            await Client.connect().then(()=>{
-                console.log("app conectado ao mongodb")
-            }).catch((err)=>{
-                console.log("não foi possivel conectar ao mongoDB: " +err)
-            })
-            //crudblog = meu mongodb database
+            await Client.connect()
+            .then(()=>{console.log("app conectado ao mongodb")})
+            .catch((err)=>{console.log("não foi possivel conectar ao mongoDB: " +err)})
+
             const database = Client.db('crudblog')
-            //Usuarios = collection que guarda os usuarios no database crudblog
-            const user = database.collection('Usuarios')
-
-            const usr = await user.find().forEach(p => console.log(p))
+            const user = database.collection('Postagens')
+            
+            //.fin() retorna um obj, o foreach retorna um array apenas com as informações que vamos usar
+            
+            let arr = []
+            await user.find().forEach(  (item)=>{ arr.push(item)  })
+            return arr
         }finally{
             await Client.close()
         }
     }
-    async function addUser(obj){
-        
+    //função para atualizar mensagens
+    async function updatePost(){
         try{
-            await Client.connect().then(()=>{
-                console.log("app conectado ao mongodb")
-            }).catch((err)=>{
-                console.log("não foi possivel conectar ao mongoDB: " +err)
-            })
-            //conectando a collection e database passados por parametros
-            const user = Client.db('crudblog').collection('Usuarios')
-
-            await user.insertOne(obj).then(console.log("O usuario foi inserido com sucesso")).catch((err)=>{
-                console.log("não foi possivel inserir o usuario: " +err)
-            })
-        }finally{
-            await Client.close()
-        }
-    }
-    async function updateUser(){
-        try{
-            await Client.connect().then(()=>{
-                console.log("app conectado ao mongodb")
-            }).catch((err)=>{
-                console.log("não foi possivel conectar ao mongoDB: " +err)
-            })
+            await Client.connect()
+            .then(()=>{console.log("app conectado ao mongodb")})
+            .catch((err)=>{console.log("não foi possivel conectar ao mongoDB: " +err)})
             //conectando a collection e database passados por parametros
             const user = Client.db('crudblog').collection('Usuarios')
 
@@ -61,80 +42,38 @@ const Client = new MongoClient('mongodb://localhost/27017}',
             await Client.close()
         }
     }
-    //função de deletar usuarios
-    async function dellUser(filter){
-        try{
-            await Client.connect().then(()=>{console.log("app conectado ao mongodb")}).catch((err)=>{console.log("não foi possivel conectar ao mongoDB: " +err)})
-            //conectando a collection e database passados por parametros
-            const user = Client.db('crudblog').collection('Usuarios')
 
-            const result = await user.deleteOne(filter).then(console.log('${result.deletecount} usuario removido')).catch((err)=>{
-                console.log("não foi possivel remover o usuario: " + err)
-            })
-            
-
-        }finally{
-            Client.close()
-        }
-
-    }
-    //  dellUser({nome: 'Caio Sidney Mendes de Oliveira'}).then(getUser())
-//Funções das postagens
-    //a função de pegar as postagens é igual a de usuarios só mudando o nome da collection... pq sim xD
-    
-    async function getPost(){
-        try{
-            await Client.connect().then(()=>{
-                console.log("app conectado ao mongodb")
-            }).catch((err)=>{
-                console.log("não foi possivel conectar ao mongoDB: " +err)
-            })
-
-            const database = Client.db('crudblog')
-            const user = database.collection('Postagens')
-            //só pra testar o find
-
-            await user.find().forEach((item)=>{
-                let arr = []
-                arr.push(item)
-                return arr
-            })
-            return getPost()
-        }finally{
-            await Client.close()
-        }
-    }
-    
-    //a função de adicionar postagens tbm é praticamente igual, ainda pq sim xD
+    //a função de adicionar postagens 
     async function addPost(obj){
         
         try{
-            await Client.connect().then(()=>{
-                console.log("app conectado ao mongodb")
-            }).catch((err)=>{
-                console.log("não foi possivel conectar ao mongoDB: " +err)
-            })
+            await Client.connect()
+            .then(()=>{console.log("app conectado ao mongodb")})
+            .catch((err)=>{console.log("não foi possivel conectar ao mongoDB: " +err)})
             //conectando a collection e database passados por parametros
             const user = Client.db('crudblog').collection('Postagens')
 
-            await user.insertOne(obj).then(console.log("mensagem postada com sucesso")).catch((err)=>{
-                console.log("não foi possivel realizar a postagem: " +err)
-            })
+            await user.insertOne(obj)
+            .then(console.log("mensagem postada com sucesso"))
+            .catch((err)=>{console.log("não foi possivel realizar a postagem: " +err)})
         }finally{
             await Client.close()
         }
     }
     //mesma coisa, função de deletar mensagem
     //o filtro que vai ser passado por parametro sera = titulo = titulo da mensagem
-    async function dellPost(filter){
+    //  dellPser({Titulo: 'boa noite'})
+    async function dellPost(id){
         try{
-            await Client.connect().then(()=>{console.log("app conectado ao mongodb")}).catch((err)=>{console.log("não foi possivel conectar ao mongoDB: " +err)})
+            await Client.connect()
+            .then(()=>{console.log("app conectado ao mongodb")})
+            .catch((err)=>{console.log("não foi possivel conectar ao mongoDB: " +err)})
             //conectando a collection e database passados por parametros
             const user = Client.db('crudblog').collection('Usuarios')
 
-            const result = await user.deleteOne(filter).then(console.log('${result.deletecount} usuario removido')).catch((err)=>{
-                console.log("não foi possivel remover o usuario: " + err)
-            })
+            await user.deleteOne({titulo: id})
+            .then(console.log('${result.deletecount} usuario removido'))
+            .catch((err)=>{console.log("não foi possivel remover o usuario: " + err)})
             
 
         }finally{
@@ -142,15 +81,23 @@ const Client = new MongoClient('mongodb://localhost/27017}',
         }
 
     }
-    // const mar = arr.map((i)=>{
-    //     console.log(i)
-
-    // })
+    const data = new Date()
+        setData = ()=>{
+            let dia = data.getDate()
+            let mes = data.getMonth()
+            let ano = data.getFullYear()
+            let hora = data.getHours()
+            let minutos = data.getMinutes()
+            let dt = dia + "/" + mes + "/"+ ano + "  as  "+ hora+":"+minutos
+            return dt
+            console.log(dt)      
+        }
 module.exports = {
     Client,
     MongoClient,
-    addPost,addUser,
-    getPost,getUser,
-    dellPost,dellUser,
-    updateUser
+    addPost,
+    getPost,
+    dellPost,
+    updatePost,
+    setData
 }

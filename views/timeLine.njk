@@ -18,16 +18,17 @@
             </div>
         </div>
     </header>
-    <main class="main-container">
+    <main class="main-container dark">
         <h1>Lista de postagens</h1>
         <hr>
 
         {% for x in itens %}     
             <div class="msg">
+                <div><h3>{{x.autor}}</h3>
+                <small>{{x.data}}</small></div>
                 <h3>{{x.titulo}}</h3>
-                <p>Autor: {{x.autor}}</p>
                 <p>{{x.conteudo}}</p>
-                <button type="submit" class="bnt">apagar</button>
+                <a href="/delete/{{x.titulo}}"><button va type="submit" class="bnt">apagar</button></a>
             </div>
         {% endfor %}
  

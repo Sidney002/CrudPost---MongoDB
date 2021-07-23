@@ -5,7 +5,10 @@ const port = 8081
 const app = express()
 const path = require('path')
 const flash =  require("connect-flash")
-const db = require('./mongoDB')
+const mongo = require('./mongoDB')
+const { RedisClient } = require('redis')
+const redis = require('./redisDB')
+const pg = require('./postgress')
 
 //Configuração   
     //public
@@ -31,45 +34,66 @@ const db = require('./mongoDB')
         
         res.render('index')
     })
-    // const collection =  JSON.parse(postagem.find())
-    // console.log(collection)
     //rota para renderizar a tela de cadastro
+    app.get('/cadastrar', (req,res)=>{
+        res.render('cadastrar')
+    })
+    //rota para tela de login
+    app.get('/logar', (req,res)=>{
+        res.render('logar')
+    })
+
+
+    //rota para renderizar a tela de postagem
     app.get('/postar', (req,res)=>{
         res.render('postar',)
     })
+    //cadastrar usuarios no postgress
+    app.post('/cadastrar', (req,res)=>{
+        const newUser = "INSERT INTO cruduser (nome,email,senha,nascimento) VALUES ($1, $2, $3, $4)"
+        pg.query(newUser,[req.body.name, req.body.email, req.body.senha, req.body.nascimento])
+        res.redirect('/')
+    })
+
     app.post('/postar',(req,res)=>{
         
-        const newPost = {
-            autor: req.body.email,
-            titulo: req.body.titulo,
-            conteudo: req.body.conteudo
+        const resposta = ""
+        const checar = (email)=>{
+            pg.query("select email from cruduser where email = $1"[email],((err,results,fields)=>{
+                resposta =  results.rows
+                return resposta
+                console.log(resposta)
+            }))
         }
-        db.addPost(newPost)
-        res.redirect('/timeLine')
+        if(checar(req.body.email) != null){
+            const newPost = {
+                autor: req.body.email,
+                titulo: req.body.titulo,
+                conteudo: req.body.conteudo,
+                data: mongo.setData()
+            }
+            mongo.addPost(newPost)
+            res.redirect('/timeLine')
+        }            
     })
 
     //rota para renderizar pagina com lista dos posts
-    app.get('/timeLine',(req,res)=>{
+    app.get('/timeLine',async (req,res)=>{
         
-        const itens = [{
-            autor : "variascoisas@hotmail.com",
-            titulo : "varias coisas",
-            conteudo : "varias coisas acontecem"
-        },{
-            autor : "poucascoisas@hotmail.com",
-            titulo : "poucas coisas",
-            conteudo : "poucas coisas acontecem"
-        },{
-            autor : "algumascoisas@hotmail.com",
-            titulo : "algumas coisas",
-            conteudo : "algumas coisas acontecem"
-        },{
-            autor : "umacoisa@hotmail.com",
-            titulo : "uma coisa",
-            conteudo : "uma coisa aconteceu"
-        }]
-        res.render('timeLine',{itens:itens})
+        const dataPost = await mongo.getPost()
+        res.render('timeLine',{itens:dataPost})
         
+    })
+    //apagar mensagem
+    app.get('/delete/:titulo',async (req,res)=>{
+        const id = await req.params.titulo
+        await mongo.dellPost(id)
+        console.log(id)
+        res.redirect('/timeLine')
+    })
+    //salvar rascunho
+    app.post('/postar/:email',(req,res)=>{
+        Redis.set(req.body.email, req.body.conteudo)
     })
 
 
