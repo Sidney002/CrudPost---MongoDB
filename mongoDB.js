@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { MongoClient, ObjectId } = require('mongodb');
 //sintax = mongodb://bancourl/porta
-const Client = new MongoClient('mongodb://localhost/27017}',
+const Client = new MongoClient('mongodb://172.19.0.2/27017}',
     {useUnifiedTopology: true});
 
 //Funções de postagens    
@@ -23,6 +23,7 @@ const Client = new MongoClient('mongodb://localhost/27017}',
             await Client.close()
         }
     }
+    getPost()
     //função para atualizar mensagens
     async function updatePost(){
         try{

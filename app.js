@@ -50,33 +50,39 @@ const pg = require('./postgress')
     })
     //cadastrar usuarios no postgress
     app.post('/cadastrar', (req,res)=>{
-        const newUser = "INSERT INTO cruduser (nome,email,senha,nascimento) VALUES ($1, $2, $3, $4)"
-        pg.query(newUser,[req.body.name, req.body.email, req.body.senha, req.body.nascimento])
+        const newUser = "INSERT INTO crudblog (nome,email,senha,nascimento) VALUES ($1, $2, $3, $4)"
+        pg.query(newUser,[req.body.nome, req.body.email, req.body.senha, req.body.nascimento])
         res.redirect('/')
     })
 
     app.post('/postar',(req,res)=>{
         
-        const resposta = ""
-        const checar = (email)=>{
-            pg.query("select email from cruduser where email = $1"[email],((err,results,fields)=>{
-                resposta =  results.rows
-                return resposta
-                console.log(resposta)
-            }))
-        }
-        if(checar(req.body.email) != null){
-            const newPost = {
-                autor: req.body.email,
-                titulo: req.body.titulo,
-                conteudo: req.body.conteudo,
-                data: mongo.setData()
-            }
-            mongo.addPost(newPost)
-            res.redirect('/timeLine')
-        }            
-    })
+        pg.query("SELECT email FROM crudblog where email = '"+req.body.email+"'", (error, result)=>{
+            if(result.rows.length > 0){
 
+                if(req.body.titulo.length > 1){
+                    const newPost = {
+                    autor: req.body.email,
+                    titulo: req.body.titulo,
+                    conteudo: req.body.conteudo,
+                    data: mongo.setData()
+                    }
+
+                    mongo.addPost(newPost)
+                    res.redirect('/timeLine') 
+                }
+                else{
+                    redis.set(req.body.email, req.body.conteudo)
+                    res.redirect('timeLine')
+                }
+                
+            }else{
+                res.status(400).send(error)
+                console.log(result)
+            }
+        })
+      
+    })
     //rota para renderizar pagina com lista dos posts
     app.get('/timeLine',async (req,res)=>{
         
@@ -91,12 +97,6 @@ const pg = require('./postgress')
         console.log(id)
         res.redirect('/timeLine')
     })
-    //salvar rascunho
-    app.post('/postar/:email',(req,res)=>{
-        Redis.set(req.body.email, req.body.conteudo)
-    })
-
-
 
 app.listen(port,()=>{
     console.log("Aplicação esta rodando na porta " + port)

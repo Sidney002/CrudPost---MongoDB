@@ -10,6 +10,7 @@ Redis_client.on("connect",(error)=>{console.log("Redis_Client Connected")})
 
 async function set(key, post){
     await Redis_client.set(key, JSON.stringify(post), "EX", 7200);
+    console.log("Rascunho salvo no redis")
 }
 function get(key){
         Redis_client.get(key,function(err,reply){
