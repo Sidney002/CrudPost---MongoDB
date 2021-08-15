@@ -54,30 +54,46 @@ const { get } = require('mongoose');
      //rota para renderizar pagina com lista dos posts
     app.get('/timeLine',async (req,res)=>{
 
-        const dataPost = await mongo.getPost()
-        res.render('timeLine',{itens:dataPost})
+        if(req.session.login){
+             //lista de postagens logado
+             res.redirect('timeLineLogado')
+        }else{
+             //lista de postagens sem login
+             const userPost =  await mongo.getPost()
+             res.render('timeLine',{post:userPost})
+        }
 
     })
-    //renderizar userPage
-    app.get('/userPage',async (req,res)=>{
-        
+    //rota para renderizar a lista de postagens quando logado
+    app.get('/timeLineLogado', async(req,res)=>{
+        if(req.session.login){
+            const userPost =  await mongo.getPost()
+            res.render('timeLineLogado',{post:userPost})
+        }else{
+            res.render('logar')
+        }
+    })
+    app.get('/myPost',async (req,res)=>{
+
+
         if(req.session.login){
 
             //lista de postagens
             const filter = req.session.login.email
             const userPost =  await mongo.getPostFilter(filter)
-            res.render('userPage',{post:userPost})
+            res.render('myPost',{post:userPost})
 
         }else{
             res.render('logar')
         }
+
     })
-    //dados pessoais
+    //renderizar userPage
     app.get('/userPage', async (req, res) =>{
         if(req.session.login){
             res.render('userPage',{login:req.session.login})
         }else{
-            res.render('/')
+            res.render('logar')
         }
         
     })
@@ -200,12 +216,12 @@ const { get } = require('mongoose');
     //publicar post
     app.post('/postar',async (req,res)=>{
         
-        const usr = { email: req.body.email}
+        const usr = req.session.login.email
 
-        if(JSON.stringify(await pg.findUser(req.body.email)) == JSON.stringify(usr)){
+        if(req.session.login){
 
                 const newPost = {
-                autor: req.body.email,
+                autor: usr,
                 titulo: req.body.titulo,
                 conteudo: req.body.conteudo,
                 data: mongo.setData()
@@ -221,7 +237,8 @@ const { get } = require('mongoose');
                 
 
         }else{
-            res.send("Usuario inexistente")
+            res.flash('error','você deve estar logado')
+            res.redirect('logar')
         }
     })
       

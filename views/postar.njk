@@ -15,6 +15,8 @@
             <div class="header-links">
                 <a href="/"> <button type="submit" class="btn">home</button> </a>
                 <a href="/timeLine"><button type="submit" class="btn">Ver Posts</button></a>
+                <a href="/myPost"><button type="submit" class="btn">Meus Posts</button></a>
+                <a href="/userPage"><button type="submit" class="btn">Perfil{{post.autor}}</button></a>
             </div>
         </div>
     </header>
@@ -24,7 +26,6 @@
         <p> para salvar um rascunho deixei o titulo em branco </p>
         <hr>
         <form action="/postar" method="post">
-            <input class="inp" type="email" name="email" id="email" placeholder="Insira seu email">
             <input class="inp" type="text" name="titulo" id="titulo" placeholder="Insira o titulo da postagem">
             <textarea name="conteudo" id="conteudo" placeholder="Digite aqui sua mensagem"></textarea>
             <button type="submit" class="bnt">Postar / Salvar</button>

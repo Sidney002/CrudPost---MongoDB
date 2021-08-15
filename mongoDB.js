@@ -17,7 +17,7 @@ const Client = new MongoClient('mongodb://172.19.0.2/27017}',
             //.fin() retorna um obj, o foreach retorna um array apenas com as informações que vamos usar
             
             let arr = []
-            await user.find().forEach(  (item)=>{ arr.push(item)  })
+            await user.find().sort({data: "desc"}).forEach(  (item)=>{ arr.push(item)  })
             return arr
         }finally{
             await Client.close()
@@ -35,7 +35,7 @@ const Client = new MongoClient('mongodb://172.19.0.2/27017}',
             //.fin() retorna um obj, o foreach retorna um array apenas com as informações que vamos usar
             
             let arr = []
-            await user.find({autor: filter}).forEach(  (item)=>{ arr.push(item) })
+            await user.find({autor: filter}).sort({data: "desc"}).forEach(  (item)=>{ arr.push(item) })
             
             return arr
             

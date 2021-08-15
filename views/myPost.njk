@@ -14,8 +14,9 @@
             </div>
             <div class="header-links">
                 <a href="/"> <button type="submit" class="btn">home</button> </a>
-                <a href="/cadastrar"><button type="submit" class="btn">Cadastrar</button></a>
-                <a href="/logar"><button type="submit" class="btn">Logar</button></a>
+                <a href="/postar"> <button type="submit" class="btn">Postar</button> </a>
+                <a href="/timeLineLogado"><button type="submit" class="btn">Ver Posts</button></a>
+                <a href="#"><button type="submit" class="btn">olá {{post.autor}}</button></a>
             </div>
         </div>
     </header>
@@ -27,6 +28,7 @@
                 <small>{{x.data}}</small></div>
                 <h3>{{x.titulo}}</h3>
                 <p>{{x.conteudo}}</p>
+                <a href="/delete/{{x.titulo}}"><button type="submit" class="bnt">apagar</button></a>
             </div>
         {% endfor %}
     </main>
