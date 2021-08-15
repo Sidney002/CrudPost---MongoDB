@@ -15,9 +15,14 @@
             <div class="header-links">
                 <a href="/"> <button type="submit" class="btn">home</button> </a>
                 <a href="/timeLine"><button type="submit" class="btn">Ver Posts</button></a>
+                <a href="/logar"><button type="submit" class="btn">Logar</button></a>
             </div>
         </div>
-
+    {% for x in erros %}
+        <div class="alert alert-danger">{{x.texto}}</div>
+        {% else %}
+        <div class="alert alert-sucess">{{x.texto}}</div>
+    {% endfor %}
         <main class="main-container cadastrar">
 
             <form action="/cadastrar" method="POST">
@@ -39,4 +44,4 @@
 
         </main>
 
-    </header>
+    

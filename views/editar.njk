@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Mini Projeto - MongoDB</title>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo"></div>
+            <div class="header-links">
+                <a href="/postar"> <button type="submit" class="btn">Postar</button> </a>
+                <a href="/timeLine"><button type="submit" class="btn">Ver Posts</button></a>
+                <a href="/cadastrar"><button type="submit" class="btn">Cadastrar</button></a>
+                <a href="/logar"><button type="submit" class="btn">Logar</button></a>
+            </div>
+            
+        </div>
+        
+    </header>
+    
+    <h1>Editar Postagem</h1>
+    <hr>
+        {% for x in post %}     
+    <form action="/editPost" method="post">
+        <input type="hidden" name="id" value="{{x._id}}">
+        <label for="">editar titulo  <input class="inp" type="text" name="titulo" id="titulo" value="{{x.titulo}}"></label>
+        <br>
+        <label for="">editar conteudo <input class="inp" type="text" name="conteudo" id="titulo" value="{{x.conteudo}}"></label>
+        <br><br>
+        <button type="submit" class="bnt">Salvar</button>
+    </form>
+    {% endfor %}
+        

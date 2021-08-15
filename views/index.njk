@@ -10,22 +10,38 @@
 <body>
     <header class="main-header">
         <div class="header-container">
+            <div class="logo"></div>
             <div class="header-links">
                 <a href="/postar"> <button type="submit" class="btn">Postar</button> </a>
                 <a href="/timeLine"><button type="submit" class="btn">Ver Posts</button></a>
                 <a href="/cadastrar"><button type="submit" class="btn">Cadastrar</button></a>
                 <a href="/logar"><button type="submit" class="btn">Logar</button></a>
             </div>
-            <div class="logo"></div>
+            
         </div>
         
     </header>
-
+    
     <main class="main-container">
-        <h1>Mini Projeto - MongoDB</h1>
-        <hr>
-        <p>Crie o CRUD de postagens utilizando o MongoDB. As postagens devem ter, pelo menos, os atributos título, texto e o identificador do autor (e-mail, cpf...). Deverão ser implementados, pelo menos um serviço para salvar uma postagem, e um serviço para listar as postagens de um determinado usuário.</p>
-        <hr>
+        <section class="project">
+            <h1>Mini Projeto - Redis</h1>
+            <p>CRUD de usuário (pelo menos nome e e-mail). Os dados devem ser persistidos no PogstgreSQL.</p>
+            <p>Cache das postagens. No frontend, com uma frequência definida pela aplicação, o sistema salvará no Redis o estado atual do editor de postagens (rascunho), para permitir que o usuário consiga recuperar essa informação caso haja algum problema. Assim, você deve criar um serviço que recebe dados do rascunho de um usuário e salva no redis com TTL de 2 horas. Utilize como chave no redis o id do usuário.</p>
+        </section>
+        
+        <section class="project">
+            <h1>Mini Projeto - MongoDB</h1>
+            <p>Crie o CRUD de postagens utilizando o MongoDB. As postagens devem ter, pelo menos, os atributos título, texto e o identificador do autor (e-mail, cpf...). Deverão ser implementados, pelo menos um serviço para salvar uma postagem, e um serviço para listar as postagens de um determinado usuário.</p>
+        </section>
+
+        <section class="project">
+            <h1>Mini Projeto - Neo4J</h1>        
+            <p>Crie um serviço que permita que um usuário siga outro. Utilize os campos chave (e-mail ou id) para indicar quem irá seguir.</p>
+            <p>Crie um serviço que retorne os usuários que um determinado usuário segue.</p>
+            <p>Crie um serviço que "recomende" seguidores. Exemplo. O usuário X, segue um usuário Y, que segue um usuário Z. Então, o usuário Z deve ser recomendado para o usuário X como um possível interesse.</p>
+        </section>
+        
+        
     </main>
 
 </body>

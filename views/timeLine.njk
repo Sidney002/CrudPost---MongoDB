@@ -15,24 +15,22 @@
             <div class="header-links">
                 <a href="/"> <button type="submit" class="btn">home</button> </a>
                 <a href="/postar"> <button type="submit" class="btn">Postar</button> </a>
-                <a href="#"><button type="submit" class="btn">olá {{test.nome}}</button></a>
+                <a href="#"><button type="submit" class="btn">olá {{login.nome}}</button></a>
             </div>
         </div>
     </header>
     <main class="main-container dark">
         <h1>Lista de postagens</h1>
-        <hr>
-
         {% for x in itens %}     
             <div class="msg">
                 <div><h3>{{x.autor}}</h3>
                 <small>{{x.data}}</small></div>
                 <h3>{{x.titulo}}</h3>
                 <p>{{x.conteudo}}</p>
-                <a href="/delete/{{x.titulo}}"><button va type="submit" class="bnt">apagar</button></a>
+                <a href="/delete/{{x.titulo}}"><button type="submit" class="bnt">apagar</button></a>
             </div>
         {% endfor %}
- 
     </main>
+    <!-- <a href="/postar"><button type="submit" class="bnt bnt-last">Nava Postagem</button></a> -->
 </body>
 </html>

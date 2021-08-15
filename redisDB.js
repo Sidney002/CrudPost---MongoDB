@@ -13,13 +13,15 @@ async function set(key, post){
     console.log("Rascunho salvo no redis")
 }
 function get(key){
+    let arr = []
         Redis_client.get(key,function(err,reply){
         if(reply!= null){
-            const teste = JSON.parse(JSON.stringify(reply));
-            console.log(teste);
-            return teste;
+            arr.push(reply)
+            console.log(arr)
         }
         else{ console.log("chave não encontrada")}
+
+            return arr
     })
 }
 module.exports = {

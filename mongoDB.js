@@ -1,4 +1,4 @@
-require('dotenv').config();
+
 const { MongoClient, ObjectId } = require('mongodb');
 //sintax = mongodb://bancourl/porta
 const Client = new MongoClient('mongodb://172.19.0.2/27017}',
@@ -23,9 +23,28 @@ const Client = new MongoClient('mongodb://172.19.0.2/27017}',
             await Client.close()
         }
     }
-    getPost()
+    async function getPostFilter(filter){
+        try{
+            await Client.connect()
+            .then(()=>{console.log("app conectado ao mongodb")})
+            .catch((err)=>{console.log("não foi possivel conectar ao mongoDB: " +err)})
+
+            const database = Client.db('crudblog')
+            const user = database.collection('Postagens')
+            
+            //.fin() retorna um obj, o foreach retorna um array apenas com as informações que vamos usar
+            
+            let arr = []
+            await user.find({autor: filter}).forEach(  (item)=>{ arr.push(item) })
+            
+            return arr
+            
+        }finally{
+            await Client.close()
+        }
+    }
     //função para atualizar mensagens
-    async function updatePost(){
+    async function updatePost(filter,titulo,conteudo){
         try{
             await Client.connect()
             .then(()=>{console.log("app conectado ao mongodb")})
@@ -33,10 +52,10 @@ const Client = new MongoClient('mongodb://172.19.0.2/27017}',
             //conectando a collection e database passados por parametros
             const user = Client.db('crudblog').collection('Usuarios')
 
-            const query = {data: 14.091999}
-            const update = {$set: {data: 14091999}}
-            await user.updateOne(query, update). then(console.log("Usuario atualizado")).catch((err)=>{
-                console.log("erro a atualizar o usuario: " + err)
+            
+            
+            await user.updateOne({_id: "ObjectId("+filter+")"},{$set: {titulo: titulo}} , (req, res) => {
+                console.log("uma postagem foi editada")
             })
 
         }finally{
@@ -70,10 +89,10 @@ const Client = new MongoClient('mongodb://172.19.0.2/27017}',
             .then(()=>{console.log("app conectado ao mongodb")})
             .catch((err)=>{console.log("não foi possivel conectar ao mongoDB: " +err)})
             //conectando a collection e database passados por parametros
-            const user = Client.db('crudblog').collection('Usuarios')
+            const user = Client.db('crudblog').collection('Postagens')
 
-            await user.deleteOne({titulo: id})
-            .then(console.log('${result.deletecount} usuario removido'))
+            await user.deleteOne(id)
+            .then(console.log('usuario removido'))
             .catch((err)=>{console.log("não foi possivel remover o usuario: " + err)})
             
 
@@ -100,5 +119,6 @@ module.exports = {
     getPost,
     dellPost,
     updatePost,
+    getPostFilter,
     setData
 }
