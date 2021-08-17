@@ -15,7 +15,6 @@
                 <a href="/"><button type="submit" class="btn">Home</button></a>
                 <a href="/postar"> <button type="submit" class="btn">Postar</button> </a>
                 <a href="/timeLineLogado"><button type="submit" class="btn">Ver Posts</button></a>
-                <a href="/myPost"><button type="submit" class="btn">Meus Posts</button></a>
                 <a href="/sair"><button type="submit" class="btn">Sair</button></a>
             </div>
             
@@ -28,8 +27,6 @@
     {%endif%}
 
     <main class="main-user">
-
-       
             
         <section class="my-posts">
             <h2>meus dados</h2>
@@ -38,6 +35,43 @@
                 <p>Email: {{login.email}}<p>
                 <p>Nascido em: {{login.nascimento}}<p>
             </div>
+        </section>
+
+          
+        <section class="my-posts">
+            <h2>Meus Posts</h2>
+                
+            <div class="msg">
+            {% for x in post %}  
+                <div>
+                    <small>{{x.data}}</small>
+                </div>
+                <h3>{{x.titulo}}</h3>
+                <p>{{x.conteudo}}</p>
+                <a href="/delete/{{x.titulo}}"><button type="submit" class="bnt">apagar</button></a>
+            {% endfor %}
+            </div>
+        </section>
+        
+    
+        <section class="my-posts">
+            <h2>Seguindo</h2>
+            <!-- testando o formato da variavel amg -->
+            {{amg}}
+            {{amg.nome}}
+            {% for x in amg %}     
+            <div class="msg">
+                <div><h3>{{x.nome}}</h3>
+                <small>{{x.email}}</small></div>
+            </div>
+            {% endfor %}
+            <h2>recomendados</h2>
+            {% for x in rcm %}     
+            <div class="msg">
+                <div><h3>{{x.nome}}</h3>
+                <small>{{x.email}}</small></div>
+            </div>
+            {% endfor %}
         </section>
 
     </main>

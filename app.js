@@ -11,6 +11,7 @@ const redis = require('./redisDB');
 const pg = require('./postgress');
 const session = require('express-session');
 const { get } = require('mongoose');
+const neo4j = require('./neo4j')
 
 //Configuração   
     //public
@@ -38,7 +39,6 @@ const { get } = require('mongoose');
     app.use((req,res,next) => {
         res.locals.success = req.flash("success")
         res.locals.error = req.flash("error")
-        res.locals.user = []
         next()
     })
 
@@ -64,34 +64,34 @@ const { get } = require('mongoose');
         }
 
     })
+    app.get('/amigos',async (req,res)=>{
+        res.render('amigos')
+    })
     //rota para renderizar a lista de postagens quando logado
     app.get('/timeLineLogado', async(req,res)=>{
         if(req.session.login){
             const userPost =  await mongo.getPost()
-            res.render('timeLineLogado',{post:userPost})
+            res.render('timeLineLogado',{post:userPost, user:req.session.login.nome})
         }else{
             res.render('logar')
         }
-    })
-    app.get('/myPost',async (req,res)=>{
-
-
-        if(req.session.login){
-
-            //lista de postagens
-            const filter = req.session.login.email
-            const userPost =  await mongo.getPostFilter(filter)
-            res.render('myPost',{post:userPost})
-
-        }else{
-            res.render('logar')
-        }
-
     })
     //renderizar userPage
     app.get('/userPage', async (req, res) =>{
         if(req.session.login){
-            res.render('userPage',{login:req.session.login})
+
+             //lista de postagens
+             const filter = req.session.login.email
+             const userPost =  await mongo.getPostFilter(filter)
+             //lista de amigos
+             const amg = await neo4j.amigos(req.session.login.email)
+             const rcm = await neo4j.recomendados(req.session.login.email)
+             console.log(amg)
+             console.log(rcm)
+
+
+             res.render('userPage',{post:userPost, login:req.session.login, amg:amg, rcm:rcm})
+
         }else{
             res.render('logar')
         }
@@ -125,6 +125,15 @@ const { get } = require('mongoose');
         console.log(filter)
         const postagem =  await mongo.getPostFilter(filter)
         res.render('editar',{post:postagem})
+    })
+
+    //rota para adicionar relacionamento de amizade
+    app.get('/amigos/:autor',async (req,res)=>{
+        const email1 = req.session.login.email
+        const email2 = req.params.autor
+        console.log("emails usados:"+ email1+" , "+ email2)
+        const amz = await neo4j.addAmizade(req.session.login.email,email2);
+        res.redirect('timeLineLogado')
     })
 
     app.post('/editPost',async (req,res)=>{
@@ -171,7 +180,9 @@ const { get } = require('mongoose');
             console.log("entrei no if de erros")
             res.render('cadastrar',{erros:erros})
         }else{
+            //cadastrar no postgress neo4j e 
             pg.cadastrarUser(req.body.nome,req.body.email, req.body.senha, req.body.nascimento)
+            neo4j.addPessoa({nome: req.body.nome,email: req.body.email})
             req.flash('success','usuario adicionado com sucesso')
             res.redirect('userPage')
         }
@@ -211,7 +222,7 @@ const { get } = require('mongoose');
     //deslogar user
     app.get('/sair',(req,res)=>{
         req.session.login = null
-        res.render('/')
+        res.render('index')
     })
     //publicar post
     app.post('/postar',async (req,res)=>{

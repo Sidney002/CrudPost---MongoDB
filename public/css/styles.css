@@ -62,6 +62,7 @@ body{
     text-align: center;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: rgba(223, 223, 223, 0.842);
+    overflow: hidden;
 }
 .bnt{
     color: black;
